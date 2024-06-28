@@ -42,6 +42,8 @@ class MyHomePage extends StatelessWidget {
 
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text('I don\'t see how that is a random idea:'),
           ResultCard(word: word),
@@ -67,6 +69,21 @@ class ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('Anyway, here it is: ${word.asLowerCase}');
+    var theme = Theme.of(context);
+    var style = theme.textTheme.displaySmall!.copyWith(
+      color: theme.colorScheme.onPrimary,
+    );
+    return Card(
+      color: theme.colorScheme.primary,
+      elevation: 4.0,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 24, 12, 24),
+        child: Text(
+          'Anyway, here it is: ${word.asPascalCase}',
+          style: style,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
 }
