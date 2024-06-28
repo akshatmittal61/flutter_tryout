@@ -47,29 +47,37 @@ class MyAppState extends ChangeNotifier {
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SafeArea(child: NavigationRail(
-          extended: false,
-          destinations: [
-            NavigationRailDestination(
-              icon: Icon(Icons.home),
-              label: Text('Home'),
-              selectedIcon: Icon(Icons.home_filled),
+    return Scaffold(
+      body: Row(
+        children: [
+          SafeArea(
+              child: NavigationRail(
+            extended: false,
+            destinations: [
+              NavigationRailDestination(
+                icon: Icon(Icons.home),
+                label: Text('Home'),
+                selectedIcon: Icon(Icons.home_filled),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.favorite_border),
+                label: Text('Favorites'),
+                selectedIcon: Icon(Icons.favorite),
+              ),
+            ],
+            selectedIndex: 0,
+            onDestinationSelected: (int index) {
+              print(index);
+            },
+          )),
+          Expanded(
+            child: Container(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              child: GeneratorPage(),
             ),
-            NavigationRailDestination(
-              icon: Icon(Icons.favorite_border),
-              label: Text('Favorites'),
-              selectedIcon: Icon(Icons.favorite),
-            ),
-          ],
-          selectedIndex: 0,
-          onDestinationSelected: (int index) {
-            print(index);
-          },
-        )),
-        Expanded(child: GeneratorPage()),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -82,13 +90,14 @@ class GeneratorPage extends StatelessWidget {
     var btnIcon =
         appState.favs.contains(word) ? Icons.favorite : Icons.favorite_border;
 
-    return Scaffold(
-      body: Column(
+    return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text('I don\'t see how that is a random idea:'),
+          SizedBox(height: 10),
           ResultCard(word: word),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,6 +107,7 @@ class GeneratorPage extends StatelessWidget {
                 label: Text('Like'),
                 icon: Icon(btnIcon),
               ),
+              SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () {
                   appState.getNext();
@@ -106,9 +116,7 @@ class GeneratorPage extends StatelessWidget {
               )
             ],
           )
-        ],
-      ),
-    );
+        ]);
   }
 }
 
