@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 0:
         pageToRender = GeneratorPage();
       case 1:
-        pageToRender = Placeholder();
+        pageToRender = FavoritesPage();
       default:
         throw UnimplementedError('no widget for index $selectedIndex');
     }
@@ -134,6 +134,63 @@ class GeneratorPage extends StatelessWidget {
             ],
           )
         ]);
+  }
+}
+
+/* class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    var words = appState.favs;
+    return ListView(
+      children: words
+          .map((w) => ResultCard(word: w))
+          .toList(),
+    );
+  }
+} */
+
+class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    var words = appState.favs;
+    var theme = Theme.of(context);
+    var style =
+        theme.textTheme.titleLarge!.copyWith(color: theme.colorScheme.primary);
+    /* return Column(
+      children: [
+        Expanded(
+          child: Text('You have ${words.length} favorite${words.length == 1 ? '' : 's'}:', style: style),
+        ),
+        Expanded(
+            child: ListView(
+          children: words
+              .map((w) => Row(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(Icons.favorite),
+                    ),
+                    Text(w.asPascalCase),
+                  ]))
+              .toList(),
+        ))
+      ],
+    ); */
+    return ListView(children: [
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+            'You have ${words.length} favorite${words.length == 1 ? '' : 's'}:',
+            style: style),
+      ),
+      ...words
+          .map((w) => ListTile(
+                leading: Icon(Icons.favorite),
+                title: Text(w.asPascalCase),
+              ))
+          .toList(),
+    ]);
   }
 }
 
