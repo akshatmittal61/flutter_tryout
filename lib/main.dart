@@ -47,9 +47,40 @@ class MyAppState extends ChangeNotifier {
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SafeArea(child: NavigationRail(
+          extended: false,
+          destinations: [
+            NavigationRailDestination(
+              icon: Icon(Icons.home),
+              label: Text('Home'),
+              selectedIcon: Icon(Icons.home_filled),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.favorite_border),
+              label: Text('Favorites'),
+              selectedIcon: Icon(Icons.favorite),
+            ),
+          ],
+          selectedIndex: 0,
+          onDestinationSelected: (int index) {
+            print(index);
+          },
+        )),
+        Expanded(child: GeneratorPage()),
+      ],
+    );
+  }
+}
+
+class GeneratorPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     WordPair word = appState.current;
-    var BtnIcon = appState.favs.contains(word) ? Icons.favorite : Icons.favorite_border;
+    var btnIcon =
+        appState.favs.contains(word) ? Icons.favorite : Icons.favorite_border;
 
     return Scaffold(
       body: Column(
@@ -65,7 +96,7 @@ class MyHomePage extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () => appState.toggleFav(),
                 label: Text('Like'),
-                icon: Icon(BtnIcon),
+                icon: Icon(btnIcon),
               ),
               ElevatedButton(
                 onPressed: () {
