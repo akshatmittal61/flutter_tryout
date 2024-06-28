@@ -27,9 +27,19 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+  var favs = <WordPair>[];
 
   void getNext() {
     current = WordPair.random();
+    notifyListeners();
+  }
+
+  void toggleFav() {
+    if (favs.contains(current)) {
+      favs.remove(current);
+    } else {
+      favs.add(current);
+    }
     notifyListeners();
   }
 }
@@ -39,6 +49,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     WordPair word = appState.current;
+    var BtnIcon = appState.favs.contains(word) ? Icons.favorite : Icons.favorite_border;
 
     return Scaffold(
       body: Column(
@@ -47,11 +58,22 @@ class MyHomePage extends StatelessWidget {
         children: [
           Text('I don\'t see how that is a random idea:'),
           ResultCard(word: word),
-          ElevatedButton(
-            onPressed: () {
-              appState.getNext();
-            },
-            child: Text('Next'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () => appState.toggleFav(),
+                label: Text('Like'),
+                icon: Icon(BtnIcon),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  appState.getNext();
+                },
+                child: Text('Next'),
+              )
+            ],
           )
         ],
       ),
