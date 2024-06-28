@@ -62,40 +62,42 @@ class _MyHomePageState extends State<MyHomePage> {
       default:
         throw UnimplementedError('no widget for index $selectedIndex');
     }
-    return Scaffold(
-      body: Row(
-        children: [
-          SafeArea(
-              child: NavigationRail(
-            extended: false,
-            destinations: [
-              NavigationRailDestination(
-                icon: Icon(Icons.home),
-                label: Text('Home'),
-                selectedIcon: Icon(Icons.home_filled),
+    return LayoutBuilder(builder: (context, constraints) {
+      return Scaffold(
+        body: Row(
+          children: [
+            SafeArea(
+                child: NavigationRail(
+              extended: constraints.maxWidth >= 600,
+              destinations: [
+                NavigationRailDestination(
+                  icon: Icon(Icons.home),
+                  label: Text('Home'),
+                  selectedIcon: Icon(Icons.home_filled),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.favorite_border),
+                  label: Text('Favorites'),
+                  selectedIcon: Icon(Icons.favorite),
+                ),
+              ],
+              selectedIndex: selectedIndex,
+              onDestinationSelected: (int index) {
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
+            )),
+            Expanded(
+              child: Container(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                child: pageToRender,
               ),
-              NavigationRailDestination(
-                icon: Icon(Icons.favorite_border),
-                label: Text('Favorites'),
-                selectedIcon: Icon(Icons.favorite),
-              ),
-            ],
-            selectedIndex: selectedIndex,
-            onDestinationSelected: (int index) {
-              setState(() {
-                selectedIndex = index;
-              });
-            },
-          )),
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              child: pageToRender,
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }
 
