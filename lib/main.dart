@@ -44,9 +44,24 @@ class MyAppState extends ChangeNotifier {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  var selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+    Widget pageToRender = Placeholder();
+    switch (selectedIndex) {
+      case 0:
+        pageToRender = GeneratorPage();
+      case 1:
+        pageToRender = Placeholder();
+      default:
+        throw UnimplementedError('no widget for index $selectedIndex');
+    }
     return Scaffold(
       body: Row(
         children: [
@@ -65,15 +80,17 @@ class MyHomePage extends StatelessWidget {
                 selectedIcon: Icon(Icons.favorite),
               ),
             ],
-            selectedIndex: 0,
+            selectedIndex: selectedIndex,
             onDestinationSelected: (int index) {
-              print(index);
+              setState(() {
+                selectedIndex = index;
+              });
             },
           )),
           Expanded(
             child: Container(
               color: Theme.of(context).colorScheme.primaryContainer,
-              child: GeneratorPage(),
+              child: pageToRender,
             ),
           ),
         ],
